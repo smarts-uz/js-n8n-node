@@ -1,16 +1,16 @@
 import { INodeType, INodeTypeDescription, NodeConnectionType } from 'n8n-workflow';
 
-export class NasaPics implements INodeType {
+export class KomolNode implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'Komol node',
+		displayName: 'Komol Node',
 		name: 'komolNode',
-		icon: 'file:nasapics.svg',
+		icon: 'file:KomolNode.svg',
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
 		description: 'Get data from NASAs API',
 		defaults: {
-			name: 'Komol node',
+			name: 'Komol Node',
 		},
 		inputs: [NodeConnectionType.Main],
 		outputs: [NodeConnectionType.Main],
@@ -39,8 +39,8 @@ export class NasaPics implements INodeType {
 						value: 'astronomyPictureOfTheDay',
 					},
 					{
-						name: 'Mars Rover Photos',
-						value: 'marsRoverPhotos',
+						name: 'Mars Rover Photo',
+						value: 'marsRoverPhoto',
 					},
 				],
 				default: 'astronomyPictureOfTheDay',
@@ -75,13 +75,13 @@ export class NasaPics implements INodeType {
 			},
 			{
 				displayName: 'Operation',
-				name: 'operation',
+				name: 'marsRoverOperation',
 				type: 'options',
 				noDataExpression: true,
 				displayOptions: {
 					show: {
 						resource: [
-							'marsRoverPhotos',
+							'marsRoverPhoto',
 						],
 					},
 				},
@@ -89,11 +89,12 @@ export class NasaPics implements INodeType {
 					{
 						name: 'Get',
 						value: 'get',
-						action: 'Get Mars Rover photos',
-						description: 'Get photos from the Mars Rover',
+						action: 'Get Mars Rover photo',
+						description: 'Get photo from the Mars Rover',
 						routing: {
 							request: {
 								method: 'GET',
+								url: '/mars-photos/api/v1/rovers/{{$parameter.roverName}}/photos',
 							},
 						},
 					},
@@ -112,16 +113,11 @@ export class NasaPics implements INodeType {
 					{ name: 'Perseverance', value: 'perseverance' },
 					{ name: 'Spirit', value: 'spirit' },
 				],
-				routing: {
-					request: {
-						url: '=/mars-photos/api/v1/rovers/{{$value}}/photos',
-					},
-				},
 				default: 'curiosity',
 				displayOptions: {
 					show: {
 						resource: [
-							'marsRoverPhotos',
+							'marsRoverPhoto',
 						],
 					},
 				},
@@ -136,20 +132,18 @@ export class NasaPics implements INodeType {
 				displayOptions: {
 					show: {
 						resource: [
-							'marsRoverPhotos',
+							'marsRoverPhoto',
 						],
 					},
 				},
 				routing: {
 					request: {
-						// You've already set up the URL. qs appends the value of the field as a query string
 						qs: {
 							earth_date: '={{ new Date($value).toISOString().substr(0,10) }}',
 						},
 					},
 				},
 			},
-			// Optional/additional fields will go here
 			{
 				displayName: 'Additional Fields',
 				name: 'additionalFields',
@@ -174,7 +168,6 @@ export class NasaPics implements INodeType {
 						default: '',
 						routing: {
 							request: {
-								// You've already set up the URL. qs appends the value of the field as a query string
 								qs: {
 									date: '={{ new Date($value).toISOString().substr(0,10) }}',
 								},

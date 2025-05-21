@@ -36,7 +36,7 @@
       "dist/credentials/NasaPicsApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/NasaPics/NasaPics.node.js"
+      "dist/nodes/KomolNode/KomolNode.node.js"
     ]
   },
   "devDependencies": {
